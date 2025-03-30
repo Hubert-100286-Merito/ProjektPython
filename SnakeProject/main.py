@@ -6,7 +6,7 @@ pygame.init()
 
 SW, SH = 800, 800
 
-
+Font = pygame.font.Font("font.ttf", 100)
 
 screen = pygame.display.set_mode((SW, SH))
 pygame.display.set_caption("Snake Test nr.1")
