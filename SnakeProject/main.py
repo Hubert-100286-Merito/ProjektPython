@@ -4,9 +4,9 @@ import random
 
 pygame.init()
 
-SW, SH = 800, 800
+SW, SH = 768, 768
 
-Rozmiar_Siatki = 50
+Rozmiar_Siatki = 32
 Font = pygame.font.Font("font.ttf", Rozmiar_Siatki*2)
 
 screen = pygame.display.set_mode((SW, SH))
