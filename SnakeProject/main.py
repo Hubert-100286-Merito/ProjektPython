@@ -4,8 +4,8 @@ import random
 
 pygame.init()
 
-SW, SH = 768, 768
-Rozmiar_Siatki = 32
+SW, SH = 1536, 768
+Rozmiar_Siatki = 96
 Font = pygame.font.Font("font.ttf", Rozmiar_Siatki*2)
 
 screen = pygame.display.set_mode((SW, SH))
@@ -201,38 +201,23 @@ while True:
     if len(snake.body) > 0:
         # Sprawdzanie czy ogon powinien być prosty czy zakrzywiony
         if len(snake.body) > 1:
-            dx = snake.tail.x - snake.body[-1].x
-            dy = snake.tail.y - snake.body[-1].y
-            tail_dir = get_direction(
-                1 if dx > 0 else (-1 if dx < 0 else 0),
-                1 if dy > 0 else (-1 if dy < 0 else 0)
-            )
-            
+            # Renderowanie ogona
+            dx = snake.tail.x - (snake.body[-1].x if len(snake.body) > 0 else snake.head.x)
+            dy = snake.tail.y - (snake.body[-1].y if len(snake.body) > 0 else snake.head.y)
+
             # Sprawdź czy ogon jest na zakręcie
-            if len(snake.prev_directions) > 1 and abs(snake.prev_directions[-1][1]) != abs(snake.prev_directions[-1][2]):
+            if len(snake.prev_directions) > 0 and abs(snake.prev_directions[-1][0]) != abs(snake.prev_directions[-1][1]):
                 prev_dir = get_direction(snake.prev_directions[-1][2], snake.prev_directions[-1][3])
                 current_dir = get_direction(snake.prev_directions[-1][0], snake.prev_directions[-1][1])
                 tail_angle = get_corner_angle(prev_dir, current_dir)
                 rotacja_t = pygame.transform.rotate(snake_tail_corner_img, tail_angle)
-                snake.prev_directions.pop()  # Usuwanie Skrętu
+                snake.prev_directions.pop()
             else:
                 # Prosty ogon
-                if dx > 0: tail_angle = 90
-                elif dx < 0: tail_angle = 270
-                elif dy > 0: tail_angle = 0
-                else: tail_angle = 180
+                tail_angle = 90 if dx > 0 else 270 if dx < 0 else 0 if dy > 0 else 180
                 rotacja_t = pygame.transform.rotate(snake_tail_img, tail_angle)
-        else:
-            # Tylko jeden segment - ogon podąża za głową
-            dx = snake.tail.x - snake.head.x
-            dy = snake.tail.y - snake.head.y
-            if dx > 0: tail_angle = 90
-            elif dx < 0: tail_angle = 270
-            elif dy > 0: tail_angle = 0
-            else: tail_angle = 180
-            rotacja_t = pygame.transform.rotate(snake_tail_img, tail_angle)
-        
-        screen.blit(rotacja_t, snake.tail)
+
+            screen.blit(rotacja_t, snake.tail)
 
     pygame.display.update()
-    clock.tick(10)
+    clock.tick(5)
