@@ -1,35 +1,35 @@
-tu zaczynaja sie zmiany i to co udalo mi sie skleic
+# tu zaczynaja sie zmiany i to co udalo mi sie skleic
 
-apple_img = pygame.image.load("red apple.png").convert_alpha()
-apple_img = pygame.transform.scale(apple_img, (Rozmiar_Siatki, Rozmiar_Siatki))
+# apple_img = pygame.image.load("red apple.png").convert_alpha()
+# apple_img = pygame.transform.scale(apple_img, (Rozmiar_Siatki, Rozmiar_Siatki))
 
-score = 0
+# score = 0
 
-def losuj_jablko(snake):
-    while True:
-        x = random.randint(0, (SW - Rozmiar_Siatki) // Rozmiar_Siatki) * Rozmiar_Siatki
-        y = random.randint(0, (SH - Rozmiar_Siatki) // Rozmiar_Siatki) * Rozmiar_Siatki
-        new_rect = pygame.Rect(x, y, Rozmiar_Siatki, Rozmiar_Siatki)
+# def losuj_jablko(snake):
+#     while True:
+#         x = random.randint(0, (SW - Rozmiar_Siatki) // Rozmiar_Siatki) * Rozmiar_Siatki
+#         y = random.randint(0, (SH - Rozmiar_Siatki) // Rozmiar_Siatki) * Rozmiar_Siatki
+#         new_rect = pygame.Rect(x, y, Rozmiar_Siatki, Rozmiar_Siatki)
 
-        if new_rect.colliderect(snake.head) or any(
-                b.colliderect(new_rect) for b in snake.body) or snake.tail.colliderect(new_rect):
-            continue
-        return new_rect
+#         if new_rect.colliderect(snake.head) or any(
+#                 b.colliderect(new_rect) for b in snake.body) or snake.tail.colliderect(new_rect):
+#             continue
+#         return new_rect
 
-apple = losuj_jablko(snake)
+# apple = losuj_jablko(snake)
 
-if snake.head.colliderect(apple):
-    score += 1
-    new_part = pygame.Rect(snake.tail.x, snake.tail.y, Rozmiar_Siatki, Rozmiar_Siatki)
-    snake.body.append(new_part)
-    apple = losuj_jablko(snake)
+# if snake.head.colliderect(apple):
+#     score += 1
+#     new_part = pygame.Rect(snake.tail.x, snake.tail.y, Rozmiar_Siatki, Rozmiar_Siatki)
+#     snake.body.append(new_part)
+#     apple = losuj_jablko(snake)
 
-screen.blit(apple_img, apple)
+# screen.blit(apple_img, apple)
 
-score_text = Font.render(str(score), True, (255, 255, 255))
-screen.blit(score_text, (10, 10))
+# score_text = Font.render(str(score), True, (255, 255, 255))
+# screen.blit(score_text, (10, 10))
 
-a tu caly kod polaczony z twoim z wyjatkiem tego ze nie dziala bo jablko nie jest wymiarowe :V
+# a tu caly kod polaczony z twoim z wyjatkiem tego ze nie dziala bo jablko nie jest wymiarowe :V
 
 
 import pygame 
@@ -38,9 +38,9 @@ import random
 
 pygame.init()
 
-SW, SH = 768, 768
+SW, SH = 1024, 768
 Rozmiar_Siatki = 32
-Font = pygame.font.Font("font.ttf", Rozmiar_Siatki*2)
+Font = pygame.font.Font("font3.ttf", Rozmiar_Siatki*2)
 
 screen = pygame.display.set_mode((SW, SH))
 pygame.display.set_caption("Snake Test nr.1")
@@ -76,9 +76,9 @@ class Snake:
         # 4 segmenty ciała + oddzielny ogon
         self.body = [
             pygame.Rect(self.x - Rozmiar_Siatki * (i+1), self.y, Rozmiar_Siatki, Rozmiar_Siatki)
-            for i in range(2)
+            for i in range(1)
         ]
-        self.tail = pygame.Rect(self.x - Rozmiar_Siatki * 5, self.y, Rozmiar_Siatki, Rozmiar_Siatki)
+        self.tail = pygame.Rect(self.x - Rozmiar_Siatki * 1, self.y, Rozmiar_Siatki, Rozmiar_Siatki)
         self.dead = False
         self.prev_directions = []
     
@@ -297,7 +297,7 @@ while True:
         screen.blit(rotacja_t, snake.tail)
         #NOWE:RYSOWANIE WYNIKU
         score_text = Font.render(str(score), True, (255, 255, 255))
-        screen.blit(score_text, (10, 10))
+        screen.blit(score_text, (SW/2, 20))
 
     pygame.display.update()
-    clock.tick(10)
+    clock.tick(5)
