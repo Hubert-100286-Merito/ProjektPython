@@ -2,6 +2,7 @@ import pygame
 import sys
 import random
 import pygame_gui
+import os
 
 pygame.init()
 
@@ -13,6 +14,23 @@ screen = pygame.display.set_mode((SW, SH))
 pygame.display.set_caption("Project: Snake")
 manager = pygame_gui.UIManager((SW, SH))
 clock = pygame.time.Clock()
+
+# Funkcje odczytu i zapisu highscore
+def read_highscore(filename="highscore.txt"):
+    if not os.path.exists(filename):
+        return 0
+    with open(filename, "r") as file:
+        try:
+            return int(file.read())
+        except ValueError:
+            return 0
+
+def write_highscore(new_score, filename="highscore.txt"):
+    with open(filename, "w") as file:
+        file.write(str(new_score))
+
+# Odczyt highscore przy starcie gry
+highscore = read_highscore()
 
 # Tekstury węża
 snake_head_img = pygame.image.load("snake.head.png").convert_alpha()
@@ -260,6 +278,11 @@ while True:
         if snake.dead:
             game_over = True
             game_active = False
+            # Aktualizacja rekordu jeśli obecny wynik jest wyższy
+            if score > highscore:
+                highscore = score
+                write_highscore(highscore)
+            
             death_panel = pygame_gui.elements.UIPanel(
                 relative_rect=pygame.Rect(0, 0, SW, SH),
                 manager=manager,
@@ -272,7 +295,14 @@ while True:
                 text=f"Punkty: {score}",
                 manager=manager,
                 container=death_panel
-            )    
+            )
+            # Dodanie etykiety z najwyższym wynikiem
+            highscore_label = pygame_gui.elements.UILabel(
+                relative_rect=pygame.Rect((SW/2 - 100, SH/2 - 100), (200, 50)),
+                text=f"Rekord: {highscore}",
+                manager=manager,
+                container=death_panel
+            )
             
             restart_button = pygame_gui.elements.UIButton(
                 relative_rect=pygame.Rect((SW/2 - 60, SH/2 - 50), (120, 50)),
@@ -397,7 +427,7 @@ while True:
             title_text = Font.render("Project: Snake", True, (255, 255, 255))
             screen.blit(title_text, (SW/2 - title_text.get_width() / 2, SH/4))
     
-    # Jeśli gra jest w pauzie, dodatkowo rysujemy przezroczysty overlay (na wypadek gdyby UI nie zajmowało całego ekranu)
+    # Jeśli gra jest w pauzie, dodatkowo rysujemy overlay (na wypadek gdyby UI nie zajmowało całego ekranu)
     if paused and pause_panel is None:
         overlay = pygame.Surface((SW, SH), pygame.SRCALPHA)
         overlay.fill((0, 0, 0, 150))
