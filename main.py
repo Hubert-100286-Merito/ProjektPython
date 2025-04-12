@@ -19,14 +19,16 @@ snake_head_img = pygame.image.load("snake.head.png").convert_alpha()
 snake_tail_img = pygame.image.load("snake.tail.png").convert_alpha()
 snake_body_img = pygame.image.load("snake.body.png").convert_alpha()
 snake_body_corner_img = pygame.image.load("snake.body.corner.png").convert_alpha()
-snake_tail_corner_img = pygame.image.load("snake.tail.corner.png").convert_alpha()
+# Usunięto ładowanie tekstury skrętu ogona:
+# snake_tail_corner_img = pygame.image.load("snake.tail.corner.png").convert_alpha()
 
 # Skalowanie tekstur
 snake_head_img = pygame.transform.scale(snake_head_img, (Rozmiar_Siatki, Rozmiar_Siatki))
 snake_body_img = pygame.transform.scale(snake_body_img, (Rozmiar_Siatki, Rozmiar_Siatki))
 snake_tail_img = pygame.transform.scale(snake_tail_img, (Rozmiar_Siatki, Rozmiar_Siatki))
 snake_body_corner_img = pygame.transform.scale(snake_body_corner_img, (Rozmiar_Siatki, Rozmiar_Siatki))
-snake_tail_corner_img = pygame.transform.scale(snake_tail_corner_img, (Rozmiar_Siatki, Rozmiar_Siatki))
+# Usunięto skalowanie tekstury skrętu ogona:
+# snake_tail_corner_img = pygame.transform.scale(snake_tail_corner_img, (Rozmiar_Siatki, Rozmiar_Siatki))
 
 # Tekstura jabłka
 apple_img = pygame.image.load("red apple.png").convert_alpha()
@@ -186,7 +188,7 @@ while True:
         
         # Obsługa klawisza P lub ESC do włączania/wyłączania pauzy (gdy gra trwa i nie ma game over)
         if game_active and not game_over and event.type == pygame.KEYDOWN:
-            if event.key in (pygame.K_p,pygame.K_ESCAPE):
+            if event.key in (pygame.K_p, pygame.K_ESCAPE):
                 paused = not paused
                 if paused:
                     # Stwórz panel pauzy – przezroczysty overlay
@@ -264,10 +266,10 @@ while True:
                 object_id="#death_panel"
             )
             death_panel.background_colour = pygame.Color(0, 0, 0, 150)
-            #Wyświetlanie punktacji po śmierci
+            # Wyświetlanie punktacji po śmierci
             score_label = pygame_gui.elements.UILabel(
-                relative_rect=pygame.Rect((SW/2 - 100,SH/2 - 150),(200, 50)),
-                text= f"Punkty: {score}",
+                relative_rect=pygame.Rect((SW/2 - 100, SH/2 - 150), (200, 50)),
+                text=f"Punkty: {score}",
                 manager=manager,
                 container=death_panel
             )    
@@ -276,14 +278,14 @@ while True:
                 relative_rect=pygame.Rect((SW/2 - 60, SH/2 - 50), (120, 50)),
                 text='Restart',
                 manager=manager,
-               container=death_panel
+                container=death_panel
             )
             quit_death_button = pygame_gui.elements.UIButton(
-               relative_rect=pygame.Rect((SW/2 - 60, SH/2 + 10), (120, 50)),
-               text='Quit',
+                relative_rect=pygame.Rect((SW/2 - 60, SH/2 + 10), (120, 50)),
+                text='Quit',
                 manager=manager,
                 container=death_panel
-    )
+            )
     
     manager.update(time_delta)
     
@@ -314,16 +316,16 @@ while True:
             is_corner = False
             corner_angle = 0
             
-            if i < len(snake.body)-1:
+            if i < len(snake.body) - 1:
                 if i == 0:
                     dx_prev = snake.body[i].x - snake.head.x
                     dy_prev = snake.body[i].y - snake.head.y
                 else:
-                    dx_prev = snake.body[i].x - snake.body[i-1].x
-                    dy_prev = snake.body[i].y - snake.body[i-1].y
+                    dx_prev = snake.body[i].x - snake.body[i - 1].x
+                    dy_prev = snake.body[i].y - snake.body[i - 1].y
                 
-                dx_next = snake.body[i+1].x - snake.body[i].x
-                dy_next = snake.body[i+1].y - snake.body[i].y
+                dx_next = snake.body[i + 1].x - snake.body[i].x
+                dy_next = snake.body[i + 1].y - snake.body[i].y
                 
                 prev_dir = get_direction(
                     1 if dx_prev > 0 else (-1 if dx_prev < 0 else 0),
@@ -345,55 +347,55 @@ while True:
                 if i == 0:
                     rotation = head_angle
                 else:
-                    dx = snake.body[i].x - snake.body[i-1].x
-                    dy = snake.body[i].y - snake.body[i-1].y
-                    if dx > 0: rotation = 270
-                    elif dx < 0: rotation = 90
-                    elif dy > 0: rotation = 180
-                    else: rotation = 0
+                    dx = snake.body[i].x - snake.body[i - 1].x
+                    dy = snake.body[i].y - snake.body[i - 1].y
+                    if dx > 0:
+                        rotation = 270
+                    elif dx < 0:
+                        rotation = 90
+                    elif dy > 0:
+                        rotation = 180
+                    else:
+                        rotation = 0
                 rotacja_b = pygame.transform.rotate(current_img, rotation)
             
             screen.blit(rotacja_b, snake.body[i])
         
-        # Renderowanie ogona
+        # Renderowanie ogona (bez skrętów)
         if len(snake.body) > 0:
             if len(snake.body) > 1:
                 dx = snake.tail.x - snake.body[-1].x
                 dy = snake.tail.y - snake.body[-1].y
-                tail_dir = get_direction(
-                    1 if dx > 0 else (-1 if dx < 0 else 0),
-                    1 if dy > 0 else (-1 if dy < 0 else 0)
-                )
-                
-                if len(snake.prev_directions) > 1 and abs(snake.prev_directions[-1][1]) != abs(snake.prev_directions[-1][2]):
-                    prev_dir = get_direction(snake.prev_directions[-1][2], snake.prev_directions[-1][3])
-                    current_dir = get_direction(snake.prev_directions[-1][0], snake.prev_directions[-1][1])
-                    tail_angle = get_corner_angle(prev_dir, current_dir)
-                    rotacja_t = pygame.transform.rotate(snake_tail_corner_img, tail_angle)
-                    snake.prev_directions.pop()
+                if dx > 0:
+                    tail_angle = 90
+                elif dx < 0:
+                    tail_angle = 270
+                elif dy > 0:
+                    tail_angle = 0
                 else:
-                    if dx > 0: tail_angle = 90
-                    elif dx < 0: tail_angle = 270
-                    elif dy > 0: tail_angle = 0
-                    else: tail_angle = 180
-                    rotacja_t = pygame.transform.rotate(snake_tail_img, tail_angle)
+                    tail_angle = 180
+                rotacja_t = pygame.transform.rotate(snake_tail_img, tail_angle)
             else:
                 dx = snake.tail.x - snake.head.x
                 dy = snake.tail.y - snake.head.y
-                if dx > 0: tail_angle = 90
-                elif dx < 0: tail_angle = 270
-                elif dy > 0: tail_angle = 0
-                else: tail_angle = 180
+                if dx > 0:
+                    tail_angle = 90
+                elif dx < 0:
+                    tail_angle = 270
+                elif dy > 0:
+                    tail_angle = 0
+                else:
+                    tail_angle = 180
                 rotacja_t = pygame.transform.rotate(snake_tail_img, tail_angle)
             
             screen.blit(rotacja_t, snake.tail)
             score_text = Font.render(str(score), True, (255, 255, 255))
-            screen.blit(score_text, (SW/2 - score_text.get_width()/2, 20))
+            screen.blit(score_text, (SW/2 - score_text.get_width() / 2, 20))
     else:
         # Ekran menu startowego lub w przypadku game over panele są rysowane przez manager
         if not game_over:
             title_text = Font.render("Project: Snake", True, (255, 255, 255))
-            screen.blit(title_text, (SW/2 - title_text.get_width()/2, SH/4))
+            screen.blit(title_text, (SW/2 - title_text.get_width() / 2, SH/4))
     
     # Jeśli gra jest w pauzie, dodatkowo rysujemy przezroczysty overlay (na wypadek gdyby UI nie zajmowało całego ekranu)
     if paused and pause_panel is None:
