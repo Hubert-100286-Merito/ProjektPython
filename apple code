@@ -17,7 +17,7 @@ clock = pygame.time.Clock()
 # Tekstury węża
 snake_head_img = pygame.image.load("snake.head.png").convert_alpha()
 snake_tail_img = pygame.image.load("snake.tail.png").convert_alpha()
-snake_body_img = pygame.image.load("snake.body.gif").convert_alpha()
+snake_body_img = pygame.image.load("snake.body.png").convert_alpha()
 snake_body_corner_img = pygame.image.load("snake.body.corner.png").convert_alpha()
 snake_tail_corner_img = pygame.image.load("snake.tail.corner.png").convert_alpha()
 
