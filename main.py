@@ -1,4 +1,5 @@
-#TSET
+##TEST
+
 import pygame
 import sys
 import random
